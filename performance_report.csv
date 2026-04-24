@@ -1,0 +1,16 @@
+Query,Expected,Predicted,Correct,Full_Search_Time_s,Optimized_Time_s,Speedup_X
+What are the symptoms of Covid-19?,Health,Health,True,3.602266311645508,0.9281845092773438,3.880980856327933
+Best diet for weight loss,Health,Health,True,2.0074844360351562,0.31201934814453125,6.433846003374331
+How to treat a migraine headache,Health,Health,True,1.8837451934814453,0.2846560478210449,6.617618729343498
+Benefits of regular exercise,Health,Health,True,2.1686553955078125,0.3015787601470947,7.191008393462633
+Mental health resources for anxiety,Health,Health,True,1.88446044921875,0.2726318836212158,6.912105892342901
+Who won the Super Bowl?,Sports,Sports,True,2.2482872009277344,0.7691199779510498,2.9231943849868705
+NBA playoff schedule,Sports,Sports,True,1.8737316131591797,0.3030409812927246,6.183096441828226
+Best soccer players of all time,Sports,Sports,True,2.149820327758789,0.3850133419036865,5.58375540216105
+Rules of tennis explained,Sports,Sports,True,2.149820327758789,0.28551363945007324,7.529658939935584
+Olympic games medal count,Sports,Sports,True,1.8787384033203125,0.3188793659210205,5.891690100091441
+Recent election results,Politics,Politics,True,2.197742462158203,0.38115572929382324,5.7659961355690905
+New legislation passed by congress,Politics,Politics,True,2.221345901489258,0.31137633323669434,7.133958700068224
+Foreign policy updates,Politics,Politics,True,2.227783203125,0.33805179595947266,6.590064687578462
+Debate schedule for candidates,Politics,Politics,True,2.2661685943603516,0.28268909454345703,8.016469818265238
+Tax reform analysis,Politics,Politics,True,2.0377635955810547,0.32601499557495117,6.250521059582889

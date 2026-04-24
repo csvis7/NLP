@@ -1,50 +1,58 @@
-from gensim.models import Word2Vec
-from sentence_transformers import SentenceTransformer
-import numpy as np
+"""
+embeddings.py
+
+Reads data/train.csv (70% training split) and generates SBERT sentence embeddings.
+Saves to data/train_embeddings.pkl.
+"""
+
+import csv
 import os
 import pickle
+import numpy as np
+from sentence_transformers import SentenceTransformer
 
-def generate_word_embeddings(tokenized_sentences, vector_size=100, window=5, min_count=1):
-    """
-    Generates Word2Vec word embeddings.
-    """
-    print("Training Word2Vec model...")
-    model = Word2Vec(sentences=tokenized_sentences, vector_size=vector_size, window=window, min_count=min_count, workers=4)
-    return model
 
-def generate_sentence_embeddings(sentences, model_name='all-MiniLM-L6-v2'):
+def load_train_data(train_path="data/train.csv"):
     """
-    Generates sentence embeddings using SBERT.
+    Reads train.csv and returns (texts, labels) lists.
+    """
+    texts, labels = [], []
+    with open(train_path, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            if row["text"].strip():
+                texts.append(row["text"].strip())
+                labels.append(row["label"].strip())
+    return texts, labels
+
+
+def generate_sentence_embeddings(sentences, model_name="all-MiniLM-L6-v2"):
+    """
+    Encodes sentences using SBERT.
+    Returns (embeddings ndarray [N, 384], model).
     """
     print(f"Loading SBERT model ({model_name})...")
     model = SentenceTransformer(model_name)
-    print("Encoding sentences...")
-    embeddings = model.encode(sentences)
+    print(f"Encoding {len(sentences)} sentences...")
+    embeddings = model.encode(sentences, convert_to_numpy=True)
+    print(f"Embedding shape: {embeddings.shape}")
     return embeddings, model
 
-def save_embeddings(embeddings, labels, file_path="data/embeddings.pkl"):
+
+def save_embeddings(embeddings, labels, file_path="data/train_embeddings.pkl"):
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
     with open(file_path, "wb") as f:
         pickle.dump({"embeddings": embeddings, "labels": labels}, f)
-    print(f"Embeddings saved to {file_path}")
+    print(f"Embeddings saved → {file_path}")
+
 
 if __name__ == "__main__":
-    from data_processor import process_data
-    
-    data, labels = process_data()
-    if not data:
-        print("No data found. Run crawler.py first.")
-    else:
-        # Word2Vec requires tokenized sentences
-        tokenized_data = [d.split() for d in data]
-        w2v_model = generate_word_embeddings(tokenized_data)
-        print(f"Word2Vec vocab size: {len(w2v_model.wv)}")
-        
-        # SBERT embeddings
-        sbert_embeddings, sbert_model = generate_sentence_embeddings(data)
-        save_embeddings(sbert_embeddings, labels)
-        
-        # Save models for later use
-        if not os.path.exists("models"):
-            os.makedirs("models")
-        w2v_model.save("models/word2vec.model")
-        # SBERT model can be reloaded by name, no need to save local weights unless fine-tuned
+    if not os.path.exists("data/train.csv"):
+        print("ERROR: data/train.csv not found. Run dataset_builder.py first.")
+        exit(1)
+
+    texts, labels = load_train_data()
+    print(f"Loaded {len(texts)} training sentences.")
+
+    embeddings, _ = generate_sentence_embeddings(texts)
+    save_embeddings(embeddings, labels)

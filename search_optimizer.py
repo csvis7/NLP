@@ -4,7 +4,7 @@ import os
 from sentence_transformers import SentenceTransformer
 
 class DynamicSearchOptimizer:
-    def __init__(self, kmeans_model_path="models/kmeans_model.pkl", embeddings_path="data/embeddings.pkl", sbert_model_name='all-MiniLM-L6-v2'):
+    def __init__(self, kmeans_model_path="models/kmeans_model.pkl", embeddings_path="data/train_embeddings.pkl", sbert_model_name='all-MiniLM-L6-v2'):
         if not os.path.exists(kmeans_model_path):
             raise FileNotFoundError("Clustering model not found. Run clusterer.py first.")
         if not os.path.exists(embeddings_path):
